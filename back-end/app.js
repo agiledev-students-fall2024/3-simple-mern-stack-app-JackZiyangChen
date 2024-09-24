@@ -3,10 +3,14 @@ const express = require('express') // CommonJS import style!
 const morgan = require('morgan') // middleware for nice logging of incoming HTTP requests
 const cors = require('cors') // middleware for enabling CORS (Cross-Origin Resource Sharing) requests.
 const mongoose = require('mongoose')
+const fs = require('fs')
 
 const app = express() // instantiate an Express object
 app.use(morgan('dev', { skip: (req, res) => process.env.NODE_ENV === 'test' })) // log all incoming requests, except when in unit test mode.  morgan has a few logging default styles - dev is a nice concise color-coded style
 app.use(cors()) // allow cross-origin resource sharing
+
+// serve static files
+app.use(express.static('public')) // serve static files from the public directory
 
 // use express's builtin body-parser middleware to parse any data included in a request
 app.use(express.json()) // decode JSON-formatted incoming POST data
@@ -76,6 +80,23 @@ app.post('/messages/save', async (req, res) => {
       status: 'failed to save the message to the database',
     })
   }
+})
+
+// a route to retrieve info on about us page
+app.get('/about', async (req, res) => {
+  // parse text from the text file
+  const text = fs.readFileSync('./public/about.txt', 'utf8')
+
+  const paragraphs = text.split('\n\n')
+  console.log(paragraphs)
+
+
+  return res.json({
+    title: 'About Me',
+    body: paragraphs,
+    image: 'https://media.licdn.com/dms/image/D4E03AQFK3jr9dCic4w/profile-displayphoto-shrink_200_200/0/1696797811054?e=2147483647&v=beta&t=ZREQclRJebS9qxqQppCDqyMSsVj7CO0XzSgperKI2fg',
+    status: 'all good',
+  })
 })
 
 // export the express app we created to make it available to other modules
