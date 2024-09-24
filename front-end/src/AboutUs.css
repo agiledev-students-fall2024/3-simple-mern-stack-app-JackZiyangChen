@@ -1,0 +1,21 @@
+h1 {
+    font-size: 2em;
+    margin-bottom: 0.5em;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 1em;
+}
+
+p {
+    text-align: left;
+    padding: 10px;
+    margin-bottom: 1em;
+}
+
+div {
+    /* horizontal padding and a little bit of verticle */
+    padding: 10px;
+}
